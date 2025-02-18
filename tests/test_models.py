@@ -144,3 +144,31 @@ class TestProductModel(unittest.TestCase):
         self.assertEqual(products[0].id, original_id)
         self.assertEqual(products[0].description, new_description)
         
+    # Test the DELETE function of application
+    def test_read_product(self):
+        """It should Delete a Product"""
+        product = ProductFactory()
+        logger.info(f"Building fake product: {product.name}")
+        product.id = None
+        product.create()
+        self.assertIsNotNone(product.id)
+        logger.info(f"Created product in DB: {product.name}")
+        # Checking if DB have 1 item
+        self.assertEqual(len(Product.all()), 1)
+        product.delete()
+        self.assertEqual(len(Product.all()), 0)
+
+    # Test the LIST ALL function of application
+    def test_list_all_product(self):
+        """It should List all Products"""
+        self.assertEqual(Product.all(), [])
+        logger.info(f"Building 5 fake products")
+        for _ in range(5):
+            product = ProductFactory()
+            product.id = None
+            product.create()
+            self.assertIsNotNone(product.id)
+        logger.info("Created 5 products in DB")
+        # Checking if DB have 5 items
+        self.assertEqual(len(Product.all()), 5)
+       
