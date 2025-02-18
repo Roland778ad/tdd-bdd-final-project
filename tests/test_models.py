@@ -106,4 +106,14 @@ class TestProductModel(unittest.TestCase):
     #
 
     # Test Read function of application
-    def 
+    def test_read_product(self):
+        """It should read a Product"""
+        product = ProductFactory()
+        product.id = None
+        product.create()
+        assert product.id != None
+        result = product.serialize()
+        assert product.name == result["name"]
+        assert product.description == result["description"]
+        assert product.category is in result["category"]
+        assert product.available == result["available"]
