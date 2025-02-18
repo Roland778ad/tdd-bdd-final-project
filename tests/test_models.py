@@ -35,6 +35,7 @@ DATABASE_URI = os.getenv(
     "DATABASE_URI", "postgresql://postgres:postgres@localhost:5432/postgres"
 )
 
+logger = logging.getLogger("flask.app")
 
 ######################################################################
 #  P R O D U C T   M O D E L   T E S T   C A S E S
@@ -101,19 +102,45 @@ class TestProductModel(unittest.TestCase):
         self.assertEqual(new_product.available, product.available)
         self.assertEqual(new_product.category, product.category)
 
-    #
-    # ADD YOUR TEST CASES HERE
-    #
+    ###################
+    # TEST CASES HERE #
+    ###################
 
-    # Test Read function of application
+    # Test READ function of application
     def test_read_product(self):
         """It should read a Product"""
         product = ProductFactory()
+        logger.info(f"Building fake product: {product.name}")
+        product.id = None
+        new_product = product.create()
+        # Use find() to fetch the product from DB
+        found_product = product.find(product.id)
+        self.assertEqual(product.id, found_product.id)
+        self.assertEqual(product.name, found_product.name)
+        self.assertEqual(product.description, found_product.description)
+        self.assertEqual(product.price, found_product.price)
+
+    # Test the UPDATE function of application
+    def test_read_product(self):
+        """It should Update a Product"""
+        product = ProductFactory()
+        logger.info(f"Building fake product: {product.name}")
         product.id = None
         product.create()
-        assert product.id != None
-        result = product.serialize()
-        assert product.name == result["name"]
-        assert product.description == result["description"]
-        assert product.category is in result["category"]
-        assert product.available == result["available"]
+        self.assertIsNotNone(product.id)
+        logger.info(f"Created product in DB: {product.name}")
+        # Updating product description
+        new_description = "This is the new product description"
+        product.description = new_description
+        # Make sure orig ID is preserved for testing
+        original_id = product.id 
+        product.update()
+        self.assertEqual(product.id, original_id)
+        self.assertEqual(product.description, new_description)
+        # Find updated product in DB
+        found_product = product.find(product.id)
+        products = Product.all()
+        self.assertEqual(len(products), 1)
+        self.assertEqual(products[0].id, original_id)
+        self.assertEqual(products[0].description, new_description)
+        
