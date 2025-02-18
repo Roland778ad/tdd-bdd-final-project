@@ -31,4 +31,10 @@ class ProductFactory(factory.Factory):
         model = Product
 
     id = factory.Sequence(lambda n: n)
+    name = factory.
+    description = factory.Faker("text")
+    price = FuzzyDecimal()
+    available = 
+    category = 
+
    ## Add code to create Fake Products 
