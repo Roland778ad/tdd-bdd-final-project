@@ -1,4 +1,4 @@
- # Copyright 2016, 2023 John J. Rofrano. All Rights Reserved.
+# Copyright 2016, 2023 John J. Rofrano. All Rights Reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -41,6 +41,8 @@ logger = logging.getLogger("flask.app")
 #  P R O D U C T   M O D E L   T E S T   C A S E S
 ######################################################################
 # pylint: disable=too-many-public-methods
+
+
 class TestProductModel(unittest.TestCase):
     """Test Cases for Product Model"""
 
@@ -112,7 +114,6 @@ class TestProductModel(unittest.TestCase):
         product = ProductFactory()
         logger.info(f"Building fake product: {product.name}")
         product.id = None
-        new_product = product.create()
         # Use find() to fetch the product from DB
         found_product = product.find(product.id)
         self.assertEqual(product.id, found_product.id)
@@ -121,7 +122,7 @@ class TestProductModel(unittest.TestCase):
         self.assertEqual(product.price, found_product.price)
 
     # Test the UPDATE function of application
-    def test_read_product(self):
+    def test_update_product(self):
         """It should Update a Product"""
         product = ProductFactory()
         logger.info(f"Building fake product: {product.name}")
@@ -133,19 +134,17 @@ class TestProductModel(unittest.TestCase):
         new_description = "This is the new product description"
         product.description = new_description
         # Make sure orig ID is preserved for testing
-        original_id = product.id 
+        original_id = product.id
         product.update()
         self.assertEqual(product.id, original_id)
         self.assertEqual(product.description, new_description)
-        # Find updated product in DB
-        found_product = product.find(product.id)
         products = Product.all()
         self.assertEqual(len(products), 1)
         self.assertEqual(products[0].id, original_id)
         self.assertEqual(products[0].description, new_description)
-        
+
     # Test the DELETE function of application
-    def test_read_product(self):
+    def test_delete_product(self):
         """It should Delete a Product"""
         product = ProductFactory()
         logger.info(f"Building fake product: {product.name}")
@@ -162,7 +161,7 @@ class TestProductModel(unittest.TestCase):
     def test_list_all_product(self):
         """It should List all Products"""
         self.assertEqual(Product.all(), [])
-        logger.info(f"Building 5 fake products")
+        logger.info("Building 5 fake products")
         for _ in range(5):
             product = ProductFactory()
             product.id = None
@@ -171,11 +170,11 @@ class TestProductModel(unittest.TestCase):
         logger.info("5 products created in DB")
         # Checking if DB have 5 items
         self.assertEqual(len(Product.all()), 5)
-       
+
     # Test the FIND by NAME function of application
     def test_find_by_name_product(self):
         """It should find a Product by name"""
-        logger.info(f"Building 5 fake products")
+        logger.info("Building 5 fake products")
         # creating a list of 5 products
         products = ProductFactory.create_batch(5)
         for product in products:
@@ -188,7 +187,7 @@ class TestProductModel(unittest.TestCase):
         count = len([product.name for product in products if name == product.name])
         # count2 = list(Product.find_by_name(prod1_name))
         # self.assertEqual(count, len(count2))
-        # Same as above, you can use count() of a query 
+        # Same as above, you can use count() of a query
         found = Product.find_by_name(name)
         self.assertEqual(found.count(), count)
         for product in found:
@@ -197,7 +196,7 @@ class TestProductModel(unittest.TestCase):
     # Test the FIND by AVAILABILITY function of application
     def test_find_by_availability(self):
         """It should find a Product by availability"""
-        logger.info(f"Building 10 fake products")
+        logger.info("Building 10 fake products")
         # creating a list of 10 products
         products = ProductFactory.create_batch(10)
         for product in products:
@@ -216,7 +215,7 @@ class TestProductModel(unittest.TestCase):
     # Test the FIND by CATEGORY function of application
     def test_find_by_category(self):
         """It should find a Product by Category"""
-        logger.info(f"Building 10 fake products")
+        logger.info("Building 10 fake products")
         # creating a list of 10 products
         products = ProductFactory.create_batch(10)
         for product in products:
@@ -230,5 +229,5 @@ class TestProductModel(unittest.TestCase):
         found = Product.find_by_category(category)
         self.assertEqual(found.count(), count)
         # Check if each item in the 'found' list matches the given category
-        for product in found:  
+        for product in found:
             self.assertEqual(product.category, category)
