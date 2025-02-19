@@ -132,3 +132,21 @@ def step_impl(context, element_name, text_string):
     )
     element.clear()
     element.send_keys(text_string)
+
+@when(u'I press the "Create" button')
+def step_impl(context):
+    
+
+@then(u'I should see the message "Success"')
+def step_impl(context):
+    raise NotImplementedError(u'STEP: Then I should see the message "Success"')
+
+
+@when(u'I press the "Clear" button')
+def step_impl(context):
+    raise NotImplementedError(u'STEP: When I press the "Clear" button')
+
+
+@when(u'I press the "Retrieve" button')
+def step_impl(context):
+    raise NotImplementedError(u'STEP: When I press the "Retrieve" button')
