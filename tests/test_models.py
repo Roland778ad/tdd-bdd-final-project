@@ -191,3 +191,44 @@ class TestProductModel(unittest.TestCase):
         # Same as above, you can use count() of a query 
         found = Product.find_by_name(name)
         self.assertEqual(found.count(), count)
+        for product in found:
+            self.assertEqual(product.name, name)
+
+    # Test the FIND by AVAILABILITY function of application
+    def test_find_by_availability(self):
+        """It should find a Product by availability"""
+        logger.info(f"Building 10 fake products")
+        # creating a list of 10 products
+        products = ProductFactory.create_batch(10)
+        for product in products:
+            product.id = None
+            product.create()
+            self.assertIsNotNone(product.id)
+        logger.info("10 products created in DB")
+        available = products[0].available
+        # list comprehension to find list of same names
+        count = len([product for product in products if available == product.available])
+        found = Product.find_by_availability(available)
+        self.assertEqual(found.count(), count)
+        for product in found:
+            self.assertEqual(product.available, available)
+
+    # Test the FIND by CATEGORY function of application
+    def test_find_by_category(self):
+        """It should find a Product by Category"""
+        logger.info(f"Building 10 fake products")
+        # creating a list of 10 products
+        products = ProductFactory.create_batch(10)
+        for product in products:
+            product.id = None
+            product.create()
+            self.assertIsNotNone(product.id)
+        logger.info("10 products created in DB")
+        category = products[0].category
+        # list comprehension to find list of same names
+        count = len([product for product in products if category == product.category])
+        found = Product.find_by_category(category)
+        self.assertEqual(found.count(), count)
+        # Check if each item in the 'found' list matches the given category
+        for product in found:  
+            self.assertEqual(product.category, category)
