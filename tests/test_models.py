@@ -168,7 +168,26 @@ class TestProductModel(unittest.TestCase):
             product.id = None
             product.create()
             self.assertIsNotNone(product.id)
-        logger.info("Created 5 products in DB")
+        logger.info("5 products created in DB")
         # Checking if DB have 5 items
         self.assertEqual(len(Product.all()), 5)
        
+    # Test the FIND by NAME function of application
+    def test_find_by_name_product(self):
+        """It should find a Product by name"""
+        logger.info(f"Building 5 fake products")
+        # creating a list of 5 products
+        products = ProductFactory.create_batch(5)
+        for product in products:
+            product.id = None
+            product.create()
+            self.assertIsNotNone(product.id)
+        logger.info("5 products created in DB")
+        name = products[0].name
+        # list comprehension to find list of same names
+        count = len([product.name for product in products if name == product.name])
+        # count2 = list(Product.find_by_name(prod1_name))
+        # self.assertEqual(count, len(count2))
+        # Same as above, you can use count() of a query 
+        found = Product.find_by_name(name)
+        self.assertEqual(found.count(), count)
