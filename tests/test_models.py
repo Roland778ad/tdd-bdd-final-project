@@ -252,3 +252,5 @@ class TestProductModel(unittest.TestCase):
         # Check if each item in the 'found' list matches the given category
         for product in found:
             self.assertEqual(product.price, price)
+        found_str = Product.find_by_price(str(price))
+        self.assertEqual(found_str.count(), count)
