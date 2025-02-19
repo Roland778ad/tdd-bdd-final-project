@@ -114,6 +114,7 @@ class TestProductModel(unittest.TestCase):
         product = ProductFactory()
         logger.info(f"Building fake product: {product.name}")
         product.id = None
+        product.create()
         # Use find() to fetch the product from DB
         found_product = product.find(product.id)
         self.assertEqual(product.id, found_product.id)
@@ -231,3 +232,23 @@ class TestProductModel(unittest.TestCase):
         # Check if each item in the 'found' list matches the given category
         for product in found:
             self.assertEqual(product.category, category)
+
+    # Test the FIND by PRICE function of application
+    def test_find_by_price(self):
+        """It should find a Product by Price"""
+        logger.info("Building 10 fake products")
+        # creating a list of 10 products
+        products = ProductFactory.create_batch(10)
+        for product in products:
+            product.id = None
+            product.create()
+            self.assertIsNotNone(product.id)
+        logger.info("10 products created in DB")
+        price = products[0].price
+        # list comprehension to find list of same names
+        count = len([product for product in products if price == product.price])
+        found = Product.find_by_price(price)
+        self.assertEqual(found.count(), count)
+        # Check if each item in the 'found' list matches the given category
+        for product in found:
+            self.assertEqual(product.price, price)
