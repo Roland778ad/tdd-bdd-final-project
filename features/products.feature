@@ -71,16 +71,66 @@ Scenario: Update a Product
     Then I should see the message "Success"
     And I shlould see "Sandals" in the "Name" field
     When I click the "Clear" button 
+    And I click the "Search" button 
     Then I should see the message "Success"
     And I should see "Sandals" in the results
     And I should not see "Shoes" in the results
 
 Scenario: Delete a Product
+    When I visit the "Home Page"
+    And I set the "Name" to "Shoes"
+    And I click the "Search" button
+    Then I should see the message "Success"
+    And I should see "Blue shoes" in the "Description" field
+    When I copy the "id" field
+    And I click the "Clear" button
+    And I paste the "id" field
+    And I click the "Delete" button
+    Then I should see the message “Product has been Deleted!”
+    When I click the "Clear" button 
+    And I click the "Search" button 
+    Then I should see the message "Success"
+    And I should not see "Shoes" in the results
 
 Scenario: List all Products
-
+    When I visit the "Home Page"
+    And I click the "Clear" button 
+    And I click the "Search" button 
+    Then I should see the message "Success"
+    And I should see "Shoes" in the results
+    And I should see "Hat" in the results
+    And I should see "Big Mac" in the results
+    And I should see "Sheets" in the results
+    
 Scenario: Search for Products by Category
+    When I visit the "Home Page"
+    And I click the "Clear" button 
+    And I select "Food" in the "category" dropdown
+    And I click the "Search" button
+    Then I should see the message "Success"
+    And I shold see "Big Mac" in the results
+    And I should not see "Shoes" in the results
+    And I should not see "Hat" in the results
+    And I should not see "Sheets" in the results
 
 Scenario: Search for Products by Availability
+    When I visit the "Home Page"
+    And I click the "Clear" button 
+    And I select "True" in the "Available" dropdown
+    And I click the "Search" button
+    Then I should see the message "Success"
+    And I shold see "Big Mac" in the results
+    And I should see "Hat" in the results
+    And I should see "Sheets" in the results
+    And I should not see "Shoes" in the results
 
 Scenario: Search for Products by Name
+    When I visit the "Home Page"
+    And I click the "Clear" button 
+    And I set "Name" to "Big Mac" 
+    And I click the "Search" button
+    Then I should see the message "Success"
+    And I shold see "Big Mac" in the results
+    And I should not see "Hat" in the results
+    And I should not see "Sheets" in the results
+    And I should not see "Shoes" in the results
