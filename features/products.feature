@@ -38,3 +38,49 @@ Scenario: Create a Product
     And I should see "True" in the "Available" dropdown
     And I should see "Tools" in the "Category" dropdown
     And I should see "34.95" in the "Price" field
+
+Scenario: Read a Product
+    When I visit the "Home Page"
+    And I set the "Name" to "Hat"
+    And I click the "Search" button
+    Then I should see the "Message" "Success"
+    When I copy the "id" field
+    And I click the "Clear" button
+    And I paste the "id" field
+    And I click the "Retrieve" button
+    Then I should see the message "Success"
+    And I should see "Hat" in the "Name" field
+    And I should see "A red fedora" in the "Description" field
+    And I should see "True" in the "Available" dropdown
+    And I should see "Cloths" in the "Category" dropdown
+    And I should see "59.95" in the "Price" field
+
+Scenario: Update a Product
+    When I visit the "Home Page"
+    And I set the "Name" to "Shoes"
+    And I click the "Search" button
+    Then I should see the message "Success"
+    And I should see "Blue shoes" in the "Description" field
+    When I change "Name" to "Sandals"
+    And I click the "Update" button
+    Then I should see the message "Success"
+    When I copy the "id" field
+    And I click the "Clear" button
+    And I paste the "id" field
+    And I click the "Retrieve" button
+    Then I should see the message "Success"
+    And I shlould see "Sandals" in the "Name" field
+    When I click the "Clear" button 
+    Then I should see the message "Success"
+    And I should see "Sandals" in the results
+    And I should not see "Shoes" in the results
+
+Scenario: Delete a Product
+
+Scenario: List all Products
+
+Scenario: Search for Products by Category
+
+Scenario: Search for Products by Availability
+
+Scenario: Search for Products by Name

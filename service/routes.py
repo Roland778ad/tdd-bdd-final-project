@@ -113,6 +113,8 @@ def get_product_list():
         products = Product.find_by_name(name)
     elif category:
         app.logger.info(f"Finding by category: {category}")
+        # For the following to work you must import Category 
+        # category_value = getattr(Category, category.upper())
         products = Product.find_by_category(category)
     elif available:
         app.logger.info(f"Finding by availability {available}")
