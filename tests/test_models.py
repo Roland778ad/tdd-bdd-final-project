@@ -35,11 +35,14 @@ DATABASE_URI = os.getenv(
     "DATABASE_URI", "postgresql://postgres:postgres@localhost:5432/postgres"
 )
 
+logger = logging.getLogger("flask.app")
 
 ######################################################################
 #  P R O D U C T   M O D E L   T E S T   C A S E S
 ######################################################################
 # pylint: disable=too-many-public-methods
+
+
 class TestProductModel(unittest.TestCase):
     """Test Cases for Product Model"""
 
@@ -101,92 +104,153 @@ class TestProductModel(unittest.TestCase):
         self.assertEqual(new_product.available, product.available)
         self.assertEqual(new_product.category, product.category)
 
-    def test_read_a_product(self):
-        """It should Read a Product"""
+    ###################
+    # TEST CASES HERE #
+    ###################
+
+    # Test READ function of application
+    def test_read_product(self):
+        """It should read a Product"""
         product = ProductFactory()
+        logger.info(f"Building fake product: {product.name}")
         product.id = None
         product.create()
-        self.assertIsNotNone(product.id)
-        # Fetch it back
-        found_product = Product.find(product.id)
-        self.assertEqual(found_product.id, product.id)
-        self.assertEqual(found_product.name, product.name)
-        self.assertEqual(found_product.description, product.description)
-        self.assertEqual(found_product.price, product.price)
+        # Use find() to fetch the product from DB
+        found_product = product.find(product.id)
+        self.assertEqual(product.id, found_product.id)
+        self.assertEqual(product.name, found_product.name)
+        self.assertEqual(product.description, found_product.description)
+        self.assertEqual(product.price, found_product.price)
 
-    def test_update_a_product(self):
+    # Test the UPDATE function of application
+    def test_update_product(self):
         """It should Update a Product"""
         product = ProductFactory()
+        logger.info(f"Building fake product: {product.name}")
         product.id = None
         product.create()
         self.assertIsNotNone(product.id)
-        # Change it an save it
-        product.description = "testing"
+        logger.info(f"Created product in DB: {product.name}")
+        # Updating product description
+        new_description = "This is the new product description"
+        product.description = new_description
+        # Make sure orig ID is preserved for testing
         original_id = product.id
         product.update()
         self.assertEqual(product.id, original_id)
-        self.assertEqual(product.description, "testing")
-        # Fetch it back and make sure the id hasn't changed
-        # but the data did change
+        self.assertEqual(product.description, new_description)
         products = Product.all()
         self.assertEqual(len(products), 1)
         self.assertEqual(products[0].id, original_id)
-        self.assertEqual(products[0].description, "testing")
+        self.assertEqual(products[0].description, new_description)
 
-    def test_delete_a_product(self):
+    # Test the DELETE function of application
+    def test_delete_product(self):
         """It should Delete a Product"""
         product = ProductFactory()
+        logger.info(f"Building fake product: {product.name}")
+        product.id = None
         product.create()
+        self.assertIsNotNone(product.id)
+        logger.info(f"Created product in DB: {product.name}")
+        # Checking if DB have 1 item
         self.assertEqual(len(Product.all()), 1)
-        # delete the product and make sure it isn't in the database
         product.delete()
         self.assertEqual(len(Product.all()), 0)
 
-    def test_list_all_products(self):
-        """It should List all Products in the database"""
-        products = Product.all()
-        self.assertEqual(products, [])
-        # Create 5 Products
+    # Test the LIST ALL function of application
+    def test_list_all_product(self):
+        """It should List all Products"""
+        self.assertEqual(Product.all(), [])
+        logger.info("Building 5 fake products")
         for _ in range(5):
             product = ProductFactory()
+            product.id = None
             product.create()
-        # See if we get back 5 products
-        products = Product.all()
-        self.assertEqual(len(products), 5)
+            self.assertIsNotNone(product.id)
+        logger.info("5 products created in DB")
+        # Checking if DB have 5 items
+        self.assertEqual(len(Product.all()), 5)
 
-    def test_find_by_name(self):
-        """It should Find a Product by Name"""
+    # Test the FIND by NAME function of application
+    def test_find_by_name_product(self):
+        """It should find a Product by name"""
+        logger.info("Building 5 fake products")
+        # creating a list of 5 products
         products = ProductFactory.create_batch(5)
         for product in products:
+            product.id = None
             product.create()
+            self.assertIsNotNone(product.id)
+        logger.info("5 products created in DB")
         name = products[0].name
-        count = len([product for product in products if product.name == name])
+        # list comprehension to find list of same names
+        count = len([product.name for product in products if name == product.name])
+        # count2 = list(Product.find_by_name(prod1_name))
+        # self.assertEqual(count, len(count2))
+        # Same as above, you can use count() of a query
         found = Product.find_by_name(name)
         self.assertEqual(found.count(), count)
         for product in found:
             self.assertEqual(product.name, name)
 
+    # Test the FIND by AVAILABILITY function of application
     def test_find_by_availability(self):
-        """It should Find Products by Availability"""
+        """It should find a Product by availability"""
+        logger.info("Building 10 fake products")
+        # creating a list of 10 products
         products = ProductFactory.create_batch(10)
         for product in products:
+            product.id = None
             product.create()
+            self.assertIsNotNone(product.id)
+        logger.info("10 products created in DB")
         available = products[0].available
-        count = len([product for product in products if product.available == available])
+        # list comprehension to find list of same names
+        count = len([product for product in products if available == product.available])
         found = Product.find_by_availability(available)
         self.assertEqual(found.count(), count)
         for product in found:
             self.assertEqual(product.available, available)
 
+    # Test the FIND by CATEGORY function of application
     def test_find_by_category(self):
-        """It should Find Products by Category"""
+        """It should find a Product by Category"""
+        logger.info("Building 10 fake products")
+        # creating a list of 10 products
         products = ProductFactory.create_batch(10)
         for product in products:
+            product.id = None
             product.create()
+            self.assertIsNotNone(product.id)
+        logger.info("10 products created in DB")
         category = products[0].category
-        count = len([product for product in products if product.category == category])
+        # list comprehension to find list of same names
+        count = len([product for product in products if category == product.category])
         found = Product.find_by_category(category)
         self.assertEqual(found.count(), count)
+        # Check if each item in the 'found' list matches the given category
         for product in found:
             self.assertEqual(product.category, category)
 
+    # Test the FIND by PRICE function of application
+    def test_find_by_price(self):
+        """It should find a Product by Price"""
+        logger.info("Building 10 fake products")
+        # creating a list of 10 products
+        products = ProductFactory.create_batch(10)
+        for product in products:
+            product.id = None
+            product.create()
+            self.assertIsNotNone(product.id)
+        logger.info("10 products created in DB")
+        price = products[0].price
+        # list comprehension to find list of same names
+        count = len([product for product in products if price == product.price])
+        found = Product.find_by_price(price)
+        self.assertEqual(found.count(), count)
+        # Check if each item in the 'found' list matches the given category
+        for product in found:
+            self.assertEqual(product.price, price)
+        found_str = Product.find_by_price(str(price))
+        self.assertEqual(found_str.count(), count)
