@@ -24,7 +24,7 @@ Scenario: Create a Product
     And I select "Tools" in the "Category" dropdown
     And I set the "Price" to "34.95"
     And I press the "Create" button
-    Then I should see the message "Success"
+    Then I should see the message "Success" 
     When I copy the "Id" field
     And I press the "Clear" button
     Then the "Id" field should be empty
@@ -42,13 +42,13 @@ Scenario: Create a Product
 Scenario: Read a Product
     When I visit the "Home Page"
     And I set the "Name" to "Hat"
-    And I click the "Search" button
-    Then I should see the "Message" "Success"
+    And I press the "Search" button
+    Then I should see the message "Success" 
     When I copy the "id" field
-    And I click the "Clear" button
+    And I press the "Clear" button
     And I paste the "id" field
-    And I click the "Retrieve" button
-    Then I should see the message "Success"
+    And I press the "Retrieve" button
+    Then I should see the message "Success" 
     And I should see "Hat" in the "Name" field
     And I should see "A red fedora" in the "Description" field
     And I should see "True" in the "Available" dropdown
@@ -58,45 +58,45 @@ Scenario: Read a Product
 Scenario: Update a Product
     When I visit the "Home Page"
     And I set the "Name" to "Shoes"
-    And I click the "Search" button
-    Then I should see the message "Success"
+    And I press the "Search" button
+    Then I should see the message "Success" 
     And I should see "Blue shoes" in the "Description" field
     When I change "Name" to "Sandals"
-    And I click the "Update" button
-    Then I should see the message "Success"
+    And I press the "Update" button
+    Then I should see the message "Success" 
     When I copy the "id" field
-    And I click the "Clear" button
+    And I press the "Clear" button
     And I paste the "id" field
-    And I click the "Retrieve" button
-    Then I should see the message "Success"
-    And I shlould see "Sandals" in the "Name" field
-    When I click the "Clear" button 
-    And I click the "Search" button 
-    Then I should see the message "Success"
+    And I press the "Retrieve" button
+    Then I should see the message "Success" 
+    And I should see "Sandals" in the "Name" field
+    When I press the "Clear" button 
+    And I press the "Search" button 
+    Then I should see the message "Success" 
     And I should see "Sandals" in the results
     And I should not see "Shoes" in the results
 
 Scenario: Delete a Product
     When I visit the "Home Page"
     And I set the "Name" to "Shoes"
-    And I click the "Search" button
-    Then I should see the message "Success"
+    And I press the "Search" button
+    Then I should see the message "Success" 
     And I should see "Blue shoes" in the "Description" field
     When I copy the "id" field
-    And I click the "Clear" button
+    And I press the "Clear" button
     And I paste the "id" field
-    And I click the "Delete" button
-    Then I should see the message “Product has been Deleted!”
-    When I click the "Clear" button 
-    And I click the "Search" button 
-    Then I should see the message "Success"
+    And I press the "Delete" button
+    Then I should see the message "Product has been Deleted!"
+    When I press the "Clear" button 
+    And I press the "Search" button 
+    Then I should see the message "Success" 
     And I should not see "Shoes" in the results
 
 Scenario: List all Products
     When I visit the "Home Page"
-    And I click the "Clear" button 
-    And I click the "Search" button 
-    Then I should see the message "Success"
+    And I press the "Clear" button 
+    And I press the "Search" button 
+    Then I should see the message "Success" 
     And I should see "Shoes" in the results
     And I should see "Hat" in the results
     And I should see "Big Mac" in the results
@@ -104,33 +104,33 @@ Scenario: List all Products
     
 Scenario: Search for Products by Category
     When I visit the "Home Page"
-    And I click the "Clear" button 
+    And I press the "Clear" button 
     And I select "Food" in the "category" dropdown
-    And I click the "Search" button
-    Then I should see the message "Success"
-    And I shold see "Big Mac" in the results
+    And I press the "Search" button
+    Then I should see the message "Success" 
+    And I should see "Big Mac" in the results
     And I should not see "Shoes" in the results
     And I should not see "Hat" in the results
     And I should not see "Sheets" in the results
 
 Scenario: Search for Products by Availability
     When I visit the "Home Page"
-    And I click the "Clear" button 
+    And I press the "Clear" button 
     And I select "True" in the "Available" dropdown
-    And I click the "Search" button
-    Then I should see the message "Success"
-    And I shold see "Big Mac" in the results
+    And I press the "Search" button
+    Then I should see the message "Success" 
+    And I should see "Big Mac" in the results
     And I should see "Hat" in the results
     And I should see "Sheets" in the results
     And I should not see "Shoes" in the results
 
 Scenario: Search for Products by Name
     When I visit the "Home Page"
-    And I click the "Clear" button 
-    And I set "Name" to "Big Mac" 
-    And I click the "Search" button
-    Then I should see the message "Success"
-    And I shold see "Big Mac" in the results
+    And I press the "Clear" button 
+    And I set the "Name" to "Big Mac" 
+    And I press the "Search" button
+    Then I should see the message "Success" 
+    And I should see "Big Mac" in the results
     And I should not see "Hat" in the results
     And I should not see "Sheets" in the results
     And I should not see "Shoes" in the results

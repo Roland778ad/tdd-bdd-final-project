@@ -99,12 +99,16 @@ def step_impl(context, element_name):
 ##################################################################
 # This code works because of the following naming convention:
 # The buttons have an id in the html hat is the button text
-# in lowercase followed by '-btn' so the Clean button has an id of
+# in lowercase followed by '-btn' so the Clear button has an id of
 # id='clear-btn'. That allows us to lowercase the name and add '-btn'
 # to get the element id of any button
 ##################################################################
 
-## UPDATE CODE HERE ##
+@when(u'I press the "{button_name}" button')
+def step_impl(context, button_name):
+    button_id = button_name.lower().replace(' ', '_') + '-btn'
+    element = context.driver.find_element(By.ID, button_id)
+    element.click()
 
 ##################################################################
 # This code works because of the following naming convention:
@@ -132,3 +136,27 @@ def step_impl(context, element_name, text_string):
     )
     element.clear()
     element.send_keys(text_string)
+
+@then(u'I should see "{text}" in the results')
+def step_impl(context, text):
+    element = WebDriverWait(context.driver, context.wait_seconds).until(
+        expected_conditions.text_to_be_present_in_element(
+            (By.ID, 'search_results'), text
+            )
+    )
+    assert(element)
+
+@then(u'I should not see "{text}" in the results')
+def step_impl(context, text):
+    element = context.driver.find_element(By.ID, "search_results")
+    assert(text not in element.text)
+
+@then(u'I should see the message "{message}"')
+def step_impl(context, message):
+    element = WebDriverWait(context.driver, context.wait_seconds).until(
+        expected_conditions.text_to_be_present_in_element(
+            (By.ID, 'flash_message'), message
+            )
+    )
+    assert(element)
+
